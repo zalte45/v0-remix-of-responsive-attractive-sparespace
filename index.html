@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SpareSpace - Neighborhood Storage Sharing</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/lucide.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <i data-lucide="package" class="nav-icon"></i>
+                <span class="nav-title">SpareSpace</span>
+            </div>
+            <div class="nav-links">
+                <button class="nav-btn active" data-view="home">Home</button>
+                <button class="nav-btn" data-view="browse">Browse Storage</button>
+                <button class="nav-btn" data-view="list">List Your Space</button>
+                <button class="nav-btn" data-view="favorites">Favorites (<span id="favorites-count">0</span>)</button>
+                <div class="user-section">
+                    <span class="welcome-text" style="display: none;">Welcome, <span id="user-name"></span></span>
+                    <button class="nav-btn" id="auth-btn" data-view="login">
+                        <i data-lucide="user" class="btn-icon"></i>
+                        Login
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Login Page -->
+    <div id="login-page" class="page-container login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <i data-lucide="package" class="login-icon"></i>
+                <h2 id="login-title">Welcome Back</h2>
+                <p id="login-description">Sign in to your SpareSpace account</p>
+            </div>
+            <div class="login-content">
+                <!-- Sign In Form -->
+                <form id="signin-form" class="auth-form">
+                    <div class="form-group">
+                        <label for="signin-email">Email</label>
+                        <input type="email" id="signin-email" placeholder="Enter your email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signin-password">Password</label>
+                        <input type="password" id="signin-password" placeholder="Enter your password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary full-width">Sign In</button>
+                </form>
+
+                <!-- Sign Up Form -->
+                <form id="signup-form" class="auth-form" style="display: none;">
+                    <div class="form-group">
+                        <label for="signup-name">Full Name</label>
+                        <input type="text" id="signup-name" placeholder="Enter your full name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signup-email">Email</label>
+                        <input type="email" id="signup-email" placeholder="Enter your email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signup-password">Password</label>
+                        <input type="password" id="signup-password" placeholder="Create a password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirm-password">Confirm Password</label>
+                        <input type="password" id="confirm-password" placeholder="Confirm your password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary full-width">Create Account</button>
+                </form>
+
+                <div class="auth-toggle">
+                    <button id="toggle-auth" class="btn-link">Don't have an account? Sign up</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Home Page -->
+    <div id="home-page" class="page-container" style="display: none;">
+        <div class="hero-section">
+            <h1 class="hero-title">SpareSpace</h1>
+            <p class="hero-subtitle">Neighborhood Storage Sharing</p>
+            <p class="hero-description">
+                Rent or offer spare storage space in your neighborhood. Connect with trusted neighbors for secure, affordable storage solutions.
+            </p>
+            <div class="hero-buttons">
+                <button class="btn btn-primary btn-large" data-view="browse">Browse Storage</button>
+                <button class="btn btn-secondary btn-large" data-view="list">List Your Space</button>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <i data-lucide="warehouse" class="feature-icon"></i>
+                    <h3>Secure Storage</h3>
+                    <p>Find verified storage spaces in your neighborhood with trusted hosts.</p>
+                </div>
+                <div class="feature-card">
+                    <i data-lucide="map-pin" class="feature-icon"></i>
+                    <h3>Local & Convenient</h3>
+                    <p>Access your stored items easily with nearby locations and flexible access.</p>
+                </div>
+                <div class="feature-card">
+                    <i data-lucide="heart" class="feature-icon"></i>
+                    <h3>Community Driven</h3>
+                    <p>Support your neighbors while finding affordable storage solutions.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Browse Storage Page -->
+    <div id="browse-page" class="page-container" style="display: none;">
+        <div class="content-wrapper">
+            <h1 class="page-title">Browse Storage Spaces</h1>
+            
+            <!-- Filters -->
+            <div class="filter-card">
+                <h3>Filter Results</h3>
+                <div class="filter-grid">
+                    <div class="form-group">
+                        <label for="type-filter">Type</label>
+                        <select id="type-filter">
+                            <option value="all">All Types</option>
+                            <option value="garage">Garage</option>
+                            <option value="room">Room</option>
+                            <option value="shed">Shed</option>
+                            <option value="attic">Attic</option>
+                            <option value="parking">Parking</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="min-price">Min Price (₹)</label>
+                        <input type="number" id="min-price" placeholder="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="max-price">Max Price (₹)</label>
+                        <input type="number" id="max-price" placeholder="10000">
+                    </div>
+                    <div class="form-group">
+                        <button id="apply-filters" class="btn btn-primary full-width">Apply Filters</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Listings Grid -->
+            <div id="listings-grid" class="listings-grid"></div>
+        </div>
+    </div>
+
+    <!-- List Your Space Page -->
+    <div id="list-page" class="page-container" style="display: none;">
+        <div class="form-container">
+            <h1 class="page-title">List Your Storage Space</h1>
+            <div class="form-card">
+                <h3>Space Details</h3>
+                <p class="form-description">Provide information about your storage space to attract renters.</p>
+                <form id="listing-form">
+                    <div class="form-group">
+                        <label for="listing-title">Title</label>
+                        <input type="text" id="listing-title" placeholder="e.g., Spacious Garage in Baner" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="listing-type">Type</label>
+                        <select id="listing-type" required>
+                            <option value="">Select storage type</option>
+                            <option value="garage">Garage</option>
+                            <option value="room">Room</option>
+                            <option value="shed">Shed</option>
+                            <option value="attic">Attic</option>
+                            <option value="parking">Parking</option>
+                        </select>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="listing-size">Size (sq ft)</label>
+                            <input type="number" id="listing-size" placeholder="150" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="listing-price">Price per month (₹)</label>
+                            <input type="number" id="listing-price" placeholder="2000" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="listing-description">Description</label>
+                        <textarea id="listing-description" placeholder="Describe your storage space, its condition, access details, etc." required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="listing-image">Image URL (optional)</label>
+                        <input type="url" id="listing-image" placeholder="https://example.com/image.jpg">
+                    </div>
+                    <button type="submit" class="btn btn-primary full-width">List Your Space</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Favorites Page -->
+    <div id="favorites-page" class="page-container" style="display: none;">
+        <div class="content-wrapper">
+            <h1 class="page-title">Your Favorites</h1>
+            <div id="favorites-content"></div>
+        </div>
+    </div>
+
+    <!-- Booking Modal -->
+    <div id="booking-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="booking-title">Book Storage Space</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="booking-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="start-date">Start Date</label>
+                            <input type="date" id="start-date" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="end-date">End Date</label>
+                            <input type="date" id="end-date" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="booking-notes">Special Notes</label>
+                        <textarea id="booking-notes" placeholder="Any special requirements or notes..."></textarea>
+                    </div>
+                    <div class="booking-summary">
+                        <div class="summary-row">
+                            <span>Monthly Rate:</span>
+                            <span id="booking-price" class="price">₹0</span>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary full-width">Confirm Booking</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
